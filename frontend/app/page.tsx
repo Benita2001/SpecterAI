@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 
 const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8001'
+const NGROK_HEADERS = { 'ngrok-skip-browser-warning': 'true' }
 
 interface FeedEntry {
   timestamp: string
@@ -70,7 +71,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchFeed = async () => {
       try {
-        const res = await fetch(`${BACKEND}/feed`)
+        const res = await fetch(`\${BACKEND}/feed`, { headers: NGROK_HEADERS })
         const data = await res.json()
         setFeed(data.feed || [])
       } catch {}
@@ -83,7 +84,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch(`${BACKEND}/stats`)
+        const res = await fetch(`\${BACKEND}/stats`, { headers: NGROK_HEADERS })
         const data = await res.json()
         setStats(data)
       } catch {}
@@ -96,7 +97,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchTrades = async () => {
       try {
-        const res = await fetch(`${BACKEND}/trades`)
+        const res = await fetch(`\${BACKEND}/trades`, { headers: NGROK_HEADERS })
         const data = await res.json()
         setTrades(data.trades || [])
       } catch {}
@@ -109,7 +110,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchParams = async () => {
       try {
-        const res = await fetch(`${BACKEND}/strategy/params`)
+        const res = await fetch(`\${BACKEND}/strategy/params`, { headers: NGROK_HEADERS })
         const data = await res.json()
         setParams(data)
         const initial: Record<string, Record<string, number>> = {}
@@ -129,7 +130,7 @@ export default function Dashboard() {
 
   const toggleStrategy = async (strategy: string, active: boolean) => {
     try {
-      await fetch(`${BACKEND}/strategy/toggle`, {
+      await fetch(`\${BACKEND}/strategy/toggle`, { headers: NGROK_HEADERS,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ strategy, active }),
@@ -141,7 +142,7 @@ export default function Dashboard() {
     const paramsToSave = editedParams[strategy] || {}
     for (const [param, value] of Object.entries(paramsToSave)) {
       try {
-        await fetch(`${BACKEND}/strategy/params/update`, {
+        await fetch(`\${BACKEND}/strategy/params/update`, { headers: NGROK_HEADERS,
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ strategy, param, value }),
@@ -158,7 +159,7 @@ export default function Dashboard() {
     setChat((prev) => [...prev, { role: 'user', text: msg }])
     setChatLoading(true)
     try {
-      const res = await fetch(`${BACKEND}/chat`, {
+      const res = await fetch(`\${BACKEND}/chat`, { headers: NGROK_HEADERS,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msg }),
@@ -181,7 +182,7 @@ export default function Dashboard() {
     if (!strategyDesc.trim() || strategyLoading) return
     setStrategyLoading(true)
     try {
-      const res = await fetch(`${BACKEND}/strategy/create`, {
+      const res = await fetch(`\${BACKEND}/strategy/create`, { headers: NGROK_HEADERS,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description: strategyDesc }),
