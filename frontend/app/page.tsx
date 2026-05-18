@@ -141,7 +141,7 @@ export default function Dashboard() {
     const paramsToSave = editedParams[strategy] || {}
     for (const [param, value] of Object.entries(paramsToSave)) {
       try {
-        await fetch(`\${BACKEND}/strategy/params/update`, { headers: { ...NGROK_HEADERS, \'Content-Type\': \'application/json\' },
+        await fetch(`\${BACKEND}/strategy/params/update`, { headers: { ...NGROK_HEADERS, "Content-Type": "application/json" },
           method: 'POST',
           body: JSON.stringify({ strategy, param, value }),
         })
