@@ -130,9 +130,8 @@ export default function Dashboard() {
 
   const toggleStrategy = async (strategy: string, active: boolean) => {
     try {
-      await fetch(`\${BACKEND}/strategy/toggle`, { headers: NGROK_HEADERS,
+      await fetch(`\${BACKEND}/strategy/toggle`, { headers: { ...NGROK_HEADERS, 'Content-Type': 'application/json' },
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ strategy, active }),
       })
     } catch {}
@@ -159,9 +158,8 @@ export default function Dashboard() {
     setChat((prev) => [...prev, { role: 'user', text: msg }])
     setChatLoading(true)
     try {
-      const res = await fetch(`\${BACKEND}/chat`, { headers: NGROK_HEADERS,
+      const res = await fetch(`\${BACKEND}/chat`, { headers: { ...NGROK_HEADERS, 'Content-Type': 'application/json' },
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msg }),
       })
       const data = await res.json()
@@ -182,9 +180,8 @@ export default function Dashboard() {
     if (!strategyDesc.trim() || strategyLoading) return
     setStrategyLoading(true)
     try {
-      const res = await fetch(`\${BACKEND}/strategy/create`, { headers: NGROK_HEADERS,
+      const res = await fetch(`\${BACKEND}/strategy/create`, { headers: { ...NGROK_HEADERS, 'Content-Type': 'application/json' },
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description: strategyDesc }),
       })
       const data = await res.json()
